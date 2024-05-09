@@ -1,0 +1,70 @@
+version: "3.7"
+services:
+  app:
+    build:
+      args:
+        user: sammy
+        uid: 1000
+      context: ./
+      dockerfile: Dockerfile
+    container_name: insight-app
+    restart: always
+    working_dir: /var/www/
+    networks:
+      - default
+    ports:
+      - "8002:8000"
+    volumes:
+      - ./:/var/www
+    depends_on:
+      - insight-mysql
+
+  insight-mysql:
+    image: mysql:8.0.32
+    container_name: insight-mysql
+    restart: unless-stopped
+    networks:
+      - default
+    ports:
+      - "3306:3306"
+    environment:
+      MYSQL_DATABASE: ${DB_DATABASE}
+      MYSQL_ROOT_PASSWORD: ${DB_PASSWORD}
+      MYSQL_PASSWORD: ${DB_PASSWORD}
+      MYSQL_USER: ${DB_USERNAME}
+      SERVICE_TAGS: dev
+      SERVICE_NAME: mysql
+    volumes:
+      - ./data:/var/lib/mysql
+      - ./mysql/my.cnf:/etc/mysql/my.cnf
+  insight-phpmyadmin:
+    platform: linux/x86_64
+    image: phpmyadmin/phpmyadmin
+    container_name: insight-phpmyadmin
+    restart: always
+    networks:
+      - default
+    ports:
+      - "8081:80"
+    depends_on:
+      - insight-mysql
+    environment:
+      PMA_HOST: insight-mysql
+  insight-nginx:
+    image: nginx:alpine
+    container_name: insight-nginx
+    restart: unless-stopped
+    ports:
+      - "8000:80"
+      - "8001:8000"
+    networks:
+      - default
+    volumes:
+      - ./:/var/www
+      - ./nginx_conf:/etc/nginx/conf.d/
+  redis:
+    image: redis
+    container_name: insight-redis
+    restart: unless-stopped
+    ports:
+      - "6379:6379"

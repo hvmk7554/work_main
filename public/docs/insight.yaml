@@ -1,0 +1,507 @@
+openapi: 3.1.0
+x-stoplight:
+  id: l5cna6kv01vkc
+info:
+  title: API
+  version: '1.0'
+  contact:
+    name: Irving Dinh
+    email: nguyendt@marathon.edu.vn
+servers:
+  - url: 'http://localhost:8000'
+    description: Local
+  - url: 'http://insight.default.svc.cluster.local'
+    description: Staging
+  - url: 'http://insight.default.svc.cluster.local'
+    description: Production
+paths:
+  /api/v1/courses:
+    get:
+      summary: Get All Courses
+      tags:
+        - Courses
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Course'
+      operationId: get-api-v1-courses
+  '/api/v1/courses/{id}':
+    get:
+      summary: Get Course Detail
+      tags:
+        - Courses
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    $ref: '#/components/schemas/Course'
+              examples: {}
+        '404':
+          description: Not Found
+      operationId: 'get-api-v1-academic-courses-:id'
+    parameters:
+      - schema:
+          type: integer
+        name: id
+        in: path
+        required: true
+  /api/v1/skus:
+    get:
+      summary: Get All SKUs
+      tags:
+        - SKU
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/SKU'
+      operationId: get-api-v1-skus
+  '/api/v1/skus/{id}':
+    parameters:
+      - schema:
+          type: string
+        name: id
+        in: path
+        required: true
+    get:
+      summary: Get SKU Detail
+      tags:
+        - SKU
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    $ref: '#/components/schemas/SKU'
+              examples: {}
+        '404':
+          description: Not Found
+      operationId: get-api-v1-skus-id
+  /api/v1/teachers:
+    get:
+      summary: Get All Teachers
+      tags:
+        - Teachers
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Teacher'
+      operationId: get-api-v1-academic-teachers
+    parameters: []
+components:
+  schemas:
+    Course:
+      title: Course
+      x-stoplight:
+        id: q7hy4oufwnb0o
+      type: object
+      examples:
+        - id: 1
+          classin_id: string
+          code: 5b33c017-3bf6-4ac3-868d-2bff43f3fe9f
+          name: Tiếng Anh - Lớp 12 - Năm 22-23
+          start_date: '2022-09-15T17:00:00.000000Z'
+          end_date: '2023-09-14T17:00:00.000000Z'
+          school_year: 2022 - 2023
+          created_at: '2022-05-30T23:38:08.000000Z'
+          updated_at: '2022-05-30T23:38:08.000000Z'
+          grades:
+            - id: 1
+              name: Lớp 9
+          subjects:
+            - id: 1
+              name: Toán
+          teachers:
+            - id: 1
+              name: Đinh Thái Nguyên
+              created_at: '2022-05-28T11:57:17.000000Z'
+              updated_at: '2022-05-28T11:57:17.000000Z'
+              grades:
+                - id: 1
+                  name: Lớp 9
+              subjects:
+                - id: 1
+                  name: Toán
+              is_selected: 'false'
+              role: Main
+          schedules:
+            - id: 1
+              course_id: 1
+              day_of_week: 0
+              start_time: 1200
+              end_time: 1290
+      properties:
+        id:
+          type: integer
+          example: 1
+        classin_id:
+          type:
+            - string
+            - 'null'
+        code:
+          type: string
+          example: 5b33c017-3bf6-4ac3-868d-2bff43f3fe9f
+        name:
+          type: string
+          example: Tiếng Anh - Lớp 12 - Năm 22-23
+        start_date:
+          type:
+            - string
+            - 'null'
+          example: '2022-09-15T17:00:00.000000Z'
+        end_date:
+          type:
+            - string
+            - 'null'
+          example: '2023-09-14T17:00:00.000000Z'
+        school_year:
+          type: string
+          example: 2022 - 2023
+        created_at:
+          type: string
+          example: '2022-05-30T23:38:08.000000Z'
+        updated_at:
+          type: string
+          example: '2022-05-30T23:38:08.000000Z'
+        grades:
+          type: array
+          items:
+            $ref: '#/components/schemas/Grade'
+        subjects:
+          type: array
+          items:
+            $ref: '#/components/schemas/Subject'
+        teachers:
+          type: array
+          items:
+            $ref: '#/components/schemas/Teacher'
+        schedules:
+          type: array
+          items:
+            $ref: '#/components/schemas/CourseSchedule'
+      description: ''
+    CourseSchedule:
+      title: CourseSchedule
+      x-stoplight:
+        id: 4b6ds61cp53jf
+      type: object
+      properties:
+        id:
+          type: number
+          example: 1
+        course_id:
+          type: number
+          example: 1
+        day_of_week:
+          type: number
+          example: 0
+          description: 'E.g. 0 is Sunday, 1 is Monday, etc.'
+        start_time:
+          type: number
+          example: 1200
+          description: 'E.g. 1200 is 20:00, 1290 is 21:30, etc.'
+        end_time:
+          type: number
+          example: 1290
+          description: 'E.g. 1200 is 20:00, 1290 is 21:30, etc.'
+      examples:
+        - id: 1
+          course_id: 1
+          day_of_week: 0
+          start_time: 1200
+          end_time: 1290
+    Grade:
+      title: Grade
+      x-stoplight:
+        id: puyh51p7r0a2y
+      type: object
+      examples:
+        - id: 1
+          name: Lớp 9
+      properties:
+        id:
+          type: number
+          example: 1
+        name:
+          type: string
+          example: Lớp 9
+    SKU:
+      title: SKU
+      x-stoplight:
+        id: vtkg0srp4flg6
+      type: object
+      examples:
+        - id: 1
+          course_id: 1
+          type: Recurring
+          code: 3Uv0
+          name: Toán 12 (22-23) (Thầy A) - 1 Tháng
+          name_on_website: Toán 12 (22-23) (Thầy A) - 1 Tháng
+          name_on_partners: Toán 12 (22-23) (Thầy A) - 1 Tháng
+          is_active: true
+          ready_for_web: true
+          ready_for_hubspot: true
+          ready_for_adt: true
+          start_date: '2022-06-01T00:00:00.000000Z'
+          end_date: '2023-05-31T00:00:00.000000Z'
+          sales_end_date: '2023-04-30T00:00:00.000000Z'
+          original_price_per_unit: 199000
+          listing_price_per_unit: '149000'
+          number_of_units: 1
+          introduction_text: Lorem ipsum dolor sit amet
+          introducing_video: 'https://www.youtube.com/watch?v=nAnVvKnl7Tw'
+          thumbnail_image: 'https://firebasestorage.googleapis.com/v0/b/marathon-edu.appspot.com/o/images%2Fteachers%2FTH%E1%BA%A6Y%20Qu%C3%A2n_To%C3%A1n.png?alt=media&token=64feed48-ea1e-455e-9d29-2c33416615fd'
+          featured_image: 'https://firebasestorage.googleapis.com/v0/b/marathon-edu.appspot.com/o/images%2Fteachers%2FTH%E1%BA%A6Y%20Qu%C3%A2n_To%C3%A1n.png?alt=media&token=64feed48-ea1e-455e-9d29-2c33416615fd'
+          created_at: '2022-06-02T13:50:38.000000Z'
+          updated_at: '2022-06-02T13:50:38.000000Z'
+          course:
+            id: 1
+            classin_id: string
+            code: 5b33c017-3bf6-4ac3-868d-2bff43f3fe9f
+            name: Tiếng Anh - Lớp 12 - Năm 22-23
+            start_date: '2022-09-15T17:00:00.000000Z'
+            end_date: '2023-09-14T17:00:00.000000Z'
+            school_year: 2022 - 2023
+            created_at: '2022-05-30T23:38:08.000000Z'
+            updated_at: '2022-05-30T23:38:08.000000Z'
+            grades:
+              - id: 1
+                name: Lớp 9
+            subjects:
+              - id: 1
+                name: Toán
+            teachers:
+              - id: 1
+                name: Đinh Thái Nguyên
+                created_at: '2022-05-28T11:57:17.000000Z'
+                updated_at: '2022-05-28T11:57:17.000000Z'
+                grades:
+                  - id: 1
+                    name: Lớp 9
+                subjects:
+                  - id: 1
+                    name: Toán
+            schedules:
+              - id: 1
+                course_id: 1
+                day_of_week: 0
+                start_time: 1200
+                end_time: 1290
+          grades: null
+          subjects: null
+          teachers: null
+      properties:
+        id:
+          type: number
+          example: 1
+        course_id:
+          type: number
+          example: 1
+        type:
+          type: string
+          example: Recurring
+          enum:
+            - Recurring
+            - Time-based
+            - Tutoring
+        code:
+          type: string
+          example: 3Uv0
+        name:
+          type: string
+          example: Toán 12 (22-23) (Thầy A) - 1 Tháng
+        name_on_website:
+          type:
+            - string
+            - 'null'
+          example: Toán 12 (22-23) (Thầy A) - 1 Tháng
+        name_on_partners:
+          type:
+            - string
+            - 'null'
+          example: Toán 12 (22-23) (Thầy A) - 1 Tháng
+        is_active:
+          type: boolean
+          default: true
+        ready_for_web:
+          type: boolean
+        ready_for_hubspot:
+          type: boolean
+        ready_for_adt:
+          type: boolean
+        start_date:
+          type:
+            - string
+            - 'null'
+          example: '2022-06-01T00:00:00.000000Z'
+        end_date:
+          type:
+            - string
+            - 'null'
+          example: '2023-05-31T00:00:00.000000Z'
+        sales_end_date:
+          type:
+            - string
+            - 'null'
+          example: '2023-04-30T00:00:00.000000Z'
+        original_price_per_unit:
+          type: integer
+          example: 199000
+        listing_price_per_unit:
+          type: integer
+          example: '149000'
+        number_of_units:
+          type:
+            - integer
+            - 'null'
+          example: 1
+        introduction_text:
+          type:
+            - string
+            - 'null'
+          example: Lorem ipsum dolor sit amet
+        introducing_video:
+          type:
+            - string
+            - 'null'
+          example: 'https://www.youtube.com/watch?v=nAnVvKnl7Tw'
+        thumbnail_image:
+          type:
+            - string
+            - 'null'
+          example: 'https://firebasestorage.googleapis.com/v0/b/marathon-edu.appspot.com/o/images%2Fteachers%2FTH%E1%BA%A6Y%20Qu%C3%A2n_To%C3%A1n.png?alt=media&token=64feed48-ea1e-455e-9d29-2c33416615fd'
+        featured_image:
+          type:
+            - string
+            - 'null'
+          example: 'https://firebasestorage.googleapis.com/v0/b/marathon-edu.appspot.com/o/images%2Fteachers%2FTH%E1%BA%A6Y%20Qu%C3%A2n_To%C3%A1n.png?alt=media&token=64feed48-ea1e-455e-9d29-2c33416615fd'
+        created_at:
+          type: string
+          example: '2022-06-02T13:50:38.000000Z'
+        updated_at:
+          type: string
+          example: '2022-06-02T13:50:38.000000Z'
+        course:
+          $ref: '#/components/schemas/Course'
+        grades:
+          type:
+            - 'null'
+            - array
+          items:
+            $ref: '#/components/schemas/Grade'
+        subjects:
+          type:
+            - 'null'
+            - array
+          items:
+            $ref: '#/components/schemas/Subject'
+        teachers:
+          type:
+            - 'null'
+            - array
+          items:
+            $ref: '#/components/schemas/Teacher'
+    Subject:
+      title: Subject
+      x-stoplight:
+        id: hn24e8kkcbuwc
+      type: object
+      examples:
+        - id: 1
+          name: Toán
+      properties:
+        id:
+          type: number
+          example: 1
+        name:
+          type: string
+          example: Toán
+    Teacher:
+      title: Teacher
+      x-stoplight:
+        id: 8wl8hxvrqh2nn
+      type: object
+      examples:
+        - id: 1
+          name: Đinh Thái Nguyên
+          created_at: '2022-05-28T11:57:17.000000Z'
+          updated_at: '2022-05-28T11:57:17.000000Z'
+          grades:
+            - id: 1
+              name: Lớp 9
+          subjects:
+            - id: 1
+              name: Toán
+          is_selected: 'false'
+          role: Main
+      properties:
+        id:
+          type: number
+          example: 1
+        name:
+          type: string
+          example: Đinh Thái Nguyên
+        created_at:
+          type: string
+          format: date-time
+          example: '2022-05-28T11:57:17.000000Z'
+        updated_at:
+          type: string
+          example: '2022-05-28T11:57:17.000000Z'
+          format: date-time
+        grades:
+          type:
+            - array
+            - 'null'
+          items:
+            $ref: '#/components/schemas/Grade'
+        subjects:
+          type:
+            - array
+            - 'null'
+          items:
+            $ref: '#/components/schemas/Subject'
+        is_selected:
+          type:
+            - boolean
+            - 'null'
+          example: 'false'
+          description: Only available when querying with `SKU`
+        role:
+          type:
+            - string
+            - 'null'
+          example: Main
+          description: Only available when querying with `Course`

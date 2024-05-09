@@ -1,0 +1,15 @@
+a[href="https://nova.laravel.com/licenses"] {
+    display: none;
+}
+
+
+.sku-redeem-table {
+    border: 1px solid;
+    text-align: left;
+}
+.sku-redeem-table tr, .sku-redeem-table th, .sku-redeem-table td{
+    text-align: left;
+    border: 1px solid;
+    padding: 5px;
+}
+
